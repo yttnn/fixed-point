@@ -1,8 +1,11 @@
 import numpy as np
 from typing import List
 from collections.abc import Callable
+from typing import Callable
 
 from utils import show_result_2D, show_dist
+
+from halpern import Halpern
 
 
 class KrasnoselskiiMann(object):
@@ -59,6 +62,7 @@ class KrasnoselskiiMann(object):
         # Krasnoselskii-Mannアルゴリズムの本体.
         for n in range(n_iter):
             xk = alpha * xk + (1 - alpha) * T(xk)
+            print(xk, T(xk))
             history['xk'].append(xk.tolist())  # 点の保存
             history['dist'].append(np.linalg.norm(xk - T(xk)))
         
@@ -151,15 +155,27 @@ if __name__ == '__main__':
     T2 = create_T(centers, radiuses, [1/3, 1/3, 1/3])
 
     # アルゴリズムの用意
-    km1 = KrasnoselskiiMann(0.5, T1)  # alpha = 0.5 の実験のパターン1
-    km2 = KrasnoselskiiMann(0.5, T2)  # alpha = 0.5 の実験のパターン2
-    km3 = KrasnoselskiiMann(0.9, T1)  # alpha = 0.9 の実験のパターン3
-    km4 = KrasnoselskiiMann(0.9, T2)  # alpha = 0.9 の実験のパターン4
-    km_list = [km1, km2, km3, km4]
+    #km1 = KrasnoselskiiMann(0.5, T1)  # alpha = 0.5 の実験のパターン1
+    #km2 = KrasnoselskiiMann(0.5, T2)  # alpha = 0.5 の実験のパターン2
+    #km3 = KrasnoselskiiMann(0.9, T1)  # alpha = 0.9 の実験のパターン3
+    #km4 = KrasnoselskiiMann(0.9, T2)  # alpha = 0.9 の実験のパターン4
+    #km_list = [km1, km2, km3, km4]
+    #km_list = [km1]
 
-    for km in km_list:
-        history = km.solve(x0, n_iter=30)
+    hal1 = Halpern(0.5, 0.999, T1)
+    hal2 = Halpern(0.5, 0.7, T1)
+    hal3 = Halpern(0.5, 0.5, T1)
+    hal4 = Halpern(0.5, 0.3, T1)
+    hal_list = [hal1, hal2, hal3, hal4]
+    #hal_list = [hal1]
+
+    for hal in hal_list:
+        history = hal.solve(x0, n_iter=50)
         histories.append(history)
+
+    #for km in km_list:
+    #    history = km.solve(x0, n_iter=60)
+    #    histories.append(history)
 
     show_result_2D(centers, radiuses, histories)  # 2次元なので視覚化する.
     show_dist(histories) # x_kとT(x_k)の関係をグラフ化する(2次元以上でも可).

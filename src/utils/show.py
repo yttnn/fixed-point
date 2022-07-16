@@ -47,6 +47,10 @@ def show_result_2D(centers: np.ndarray, raiduses: np.ndarray,
     ax.set_xlabel(r'$x_1$')
     ax.set_ylabel(r'$x_2$')
 
+    ### display limitation
+    plt.xlim([0.0,1.6])
+    plt.ylim([1.4,3.0])
+
     if dir is None:
         plt.show()
     else:
