@@ -68,7 +68,6 @@ class Halpern(object):
                 alpha_k = 1 / (k**a)
             k+=1
             xk = alpha_k * x0 + (1 - alpha_k) * T(xk)
-            #print(k, alpha_k, xk, T(xk))
             history['xk'].append(xk.tolist())  # 点の保存
             history['dist'].append(np.linalg.norm(xk - T(xk)))
         

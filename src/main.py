@@ -62,7 +62,6 @@ class KrasnoselskiiMann(object):
         # Krasnoselskii-Mannアルゴリズムの本体.
         for n in range(n_iter):
             xk = alpha * xk + (1 - alpha) * T(xk)
-            print(xk, T(xk))
             history['xk'].append(xk.tolist())  # 点の保存
             history['dist'].append(np.linalg.norm(xk - T(xk)))
         
@@ -86,7 +85,7 @@ def create_projection(center: np.ndarray, radius: float) -> Callable[[np.ndarray
         if dist <= radius:
             return x
         else:
-            return center + (x - center) / dist
+            return center + (x - center) * radius / dist
     
     return projection
 
@@ -155,21 +154,20 @@ if __name__ == '__main__':
     T2 = create_T(centers, radiuses, [1/3, 1/3, 1/3])
 
     # アルゴリズムの用意
-    #km1 = KrasnoselskiiMann(0.5, T1)  # alpha = 0.5 の実験のパターン1
-    #km2 = KrasnoselskiiMann(0.5, T2)  # alpha = 0.5 の実験のパターン2
-    #km3 = KrasnoselskiiMann(0.9, T1)  # alpha = 0.9 の実験のパターン3
-    #km4 = KrasnoselskiiMann(0.9, T2)  # alpha = 0.9 の実験のパターン4
-    #km_list = [km1, km2, km3, km4]
-    #km_list = [km1]
+    km1 = KrasnoselskiiMann(0.5, T1)  # alpha = 0.5 の実験のパターン1
+    km2 = KrasnoselskiiMann(0.5, T2)  # alpha = 0.5 の実験のパターン2
+    km3 = KrasnoselskiiMann(0.9, T1)  # alpha = 0.9 の実験のパターン3
+    km4 = KrasnoselskiiMann(0.9, T2)  # alpha = 0.9 の実験のパターン4
+    km_list = [km1, km2, km3, km4]
 
-    hal1 = Halpern(0.5, 0.999, T1)
-    hal2 = Halpern(0.5, 0.7, T1)
-    hal3 = Halpern(0.5, 0.5, T1)
-    hal4 = Halpern(0.5, 0.3, T1)
-    hal_list = [hal1, hal2, hal3, hal4]
+    #hal1 = Halpern(0.5, 0.999, T1)
+    #hal2 = Halpern(0.5, 0.7, T1)
+    #hal3 = Halpern(0.5, 0.5, T1)
+    #hal4 = Halpern(0.5, 0.3, T1)
+    #hal_list = [hal1, hal2, hal3, hal4]
     #hal_list = [hal1]
 
-    for hal in hal_list:
+    for hal in km_list:
         history = hal.solve(x0, n_iter=50)
         histories.append(history)
 
